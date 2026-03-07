@@ -1,0 +1,88 @@
+. Inversion Method
+
+Finding minimum subarray can be done using Kadane on inverted array. we know total=min+max therefore min=total-max
+
+Steps:
+
+Find normal max subarray (Kadane)
+
+Compute total sum
+
+Invert the array
+
+Run Kadane again
+
+Add total sum
+
+Example:
+
+arr = [8, -1, 3, 4]
+Step 1 — Normal max
+Kadane = 14
+Step 2 — Total sum
+8 + (-1) + 3 + 4 = 14
+Step 3 — Invert array
+[-8, 1, -3, -4]
+Step 4 — Kadane on inverted array
+Max sum = 1
+Step 5 — Circular sum
+Circular = totalSum + invertedKadane
+         = 14 + 1
+         = 15
+Final Answer
+max(normalKadane , circular)
+= max(14 , 15)
+= 15
+5. Edge Case (Very Important)
+
+If all numbers are negative
+
+Example:
+
+[-3, -2, -5]
+
+Then circular formula gives wrong result.
+
+So we return:  NORMAL KADANE
+
+code:
+
+(helper)  :
+int kadane(vector<int>& arr) {
+    int maxSum = arr[0];
+    int currSum = arr[0];
+
+    for(int i = 1; i < arr.size(); i++) {
+        currSum = max(arr[i], currSum + arr[i]);
+        maxSum = max(maxSum, currSum);
+    }
+
+    return maxSum;
+}
+
+int maxCircularSubarraySum(vector<int>& arr) {
+    int normalMax = kadane(arr);
+
+    // if all numbers are negative  @edge case
+    if(normalMax < 0)
+        return normalMax;
+
+    int totalSum = 0;
+
+    for(int i = 0; i < arr.size(); i++) {
+        totalSum += arr[i];
+        arr[i] = -arr[i];   // invert array
+    }
+
+    int invertedKadane = kadane(arr);
+
+    int circularMax = totalSum + invertedKadane;
+
+    return max(normalMax, circularMax);
+}
+
+
+
+
+
+normal Kadane
