@@ -1,0 +1,91 @@
+ques:
+ nums = [100, 4, 200, 1, 3, 2]  
+Output:
+ 4  
+Explanation:
+ The longest sequence of consecutive elements in the array is [1, 2, 3, 4], which has a length of 4. This sequence can be formed regardless of the initial order of the elements in the array.
+
+code:
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+
+        int n = nums.size();
+        if(n == 0) return 0;
+
+        sort(nums.begin(), nums.end());
+
+        int lastSmaller = nums[0];
+        int cnt = 1;
+        int longest = 1;
+
+        for(int i = 1; i < n; i++) {
+
+            if(nums[i] - 1 == lastSmaller) {
+                cnt++;
+                lastSmaller = nums[i];
+            }
+
+            else if(nums[i] != lastSmaller) {
+                cnt = 1;
+                lastSmaller = nums[i];
+            }
+
+            longest = max(longest, cnt);
+        }
+
+        return longest;
+    }
+};
+
+
+
+
+
+optimal:
+We will use two variables: cnt to store the length of the current sequence and longest to store the maximum length found.
+First, place all the array elements into a set data structure to allow efficient lookups for consecutive numbers.
+For each element x that can start a sequence (i.e., x - 1 does not exist in the set), we follow these steps:
+Initialize cnt to 1, indicating the starting element of a new sequence.
+Use the set to search for consecutive elements such as x + 1, x + 2, and so on, to determine the maximum possible length of the current sequence. Update cnt accordingly.
+Compare cnt with longest and update longest to hold the maximum value: longest = max(longest, cnt).
+Finally, longest will contain the length of the longest consecutive sequence found in the array.
+
+code:
+int n = a.size();
+        // If the array is empty
+        if (n == 0) return 0; 
+    
+        // Initialize the longest sequence length
+        int longest = 1; 
+        unordered_set<int> st;
+    
+        // Put all the array elements into the set
+        for (int i = 0; i < n; i++) {
+            st.insert(a[i]);
+        }
+    
+        /* Traverse the set to 
+           find the longest sequence  */
+        for (auto it : st) {
+            // Check if 'it' is a starting number of a sequence
+            if (st.find(it - 1) == st.end()) {
+                // Initialize the count of the current sequence
+                int cnt = 1; 
+                // Starting element of the sequence
+                int x = it; 
+    
+                // Find consecutive numbers in the set
+                while (st.find(x + 1) != st.end()) {
+                    // Move to the next element in the sequence
+                    x = x + 1; 
+                    // Increment the count of the sequence
+                    cnt = cnt + 1; 
+                }
+                // Update the longest sequence length
+                longest = max(longest, cnt);
+            }
+        }
+        return longest;
+    }
+};
