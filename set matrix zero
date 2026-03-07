@@ -1,0 +1,49 @@
+ques:
+Given a matrix if an element in the matrix is 0 then you will have to set its entire column and row to 0 and then return the matrix..
+
+brute:
+ we use a special marker value (like -1 or something that can’t exist in the input) to mark places where zeros should be placed later. Once the scanning is done, we do a second pass and replace all markers with 0.Traverse the entire matrix.
+If an element is zero:
+Mark all elements in its row (except already zero) as -1.
+Mark all elements in its column (except already zero) as -1.
+Once the full traversal is complete, replace all -1 with 0.
+
+code:
+void setZeroes(vector<vector<int>>& matrix) {
+        // Get number of rows
+        int m = matrix.size();
+        // Get number of columns
+        int n = matrix[0].size();
+
+        // Traverse each cell of the matrix
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // If current cell is zero
+                if (matrix[i][j] == 0) {
+                    // Mark all elements in this row as -1 (except existing zeros)
+                    for (int col = 0; col < n; col++) {
+                        if (matrix[i][col] != 0)
+                            matrix[i][col] = -1;
+                    }
+                    // Mark all elements in this column as -1 (except existing zeros)
+                    for (int row = 0; row < m; row++) {
+                        if (matrix[row][j] != 0)
+                            matrix[row][j] = -1;
+                    }
+                }
+            }
+        }
+
+        // Second pass: replace all -1 markers with 0
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == -1)
+                    matrix[i][j] = 0;
+            }
+        }
+    }
+};
+
+
+
+optimal:
