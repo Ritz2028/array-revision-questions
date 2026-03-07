@@ -1,0 +1,47 @@
+
+Pascal’s Triangle row uses binomial coefficients C(n,k)
+EX:
+N = 5, r = 5, c = 3 
+Output: : 1 4 6 4 1
+First n rows of Pascal’s triangle:
+1 
+1 1 
+1 2 1 
+1 3 3 1 
+1 4 6 4 1  
+
+@@ THEORY  @@
+
+FORMULA LEARN :-
+val = val * (N - k) / k
+n → row number
+Represents the row of Pascal’s triangle (or total items).
+k → column index
+Represents the position inside that row.
+Row 0:           1
+Row 1:         1   1
+Row 2:       1   2   1
+Row 3:     1   3   3   1
+Row 4:   1   4   6   4   1
+	​
+CODE:
+    // Function to generate the Nth row of Pascal's Triangle
+    vector<long long> getNthRow(int N) {
+        // Result vector to store the row
+        vector<long long> row;
+        
+        // First value of the row is always 1
+        long long val = 1;
+        row.push_back(val);
+        
+        // Compute remaining values using the relation:
+        // C(n, k) = C(n, k-1) * (n-k) / k
+        for (int k = 1; k < N; k++)
+          {
+            val = val * (N - k) / k;
+            row.push_back(val);
+        }
+        
+        return row;
+    }
+};
