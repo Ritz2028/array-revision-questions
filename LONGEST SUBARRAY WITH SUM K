@@ -13,7 +13,8 @@ int maxLen(int A[], int n, int k) {
 
         sum += A[i];
 
-        if(mpp.find(sum - k) != mpp.end()) {
+        if(mpp.find(sum - k) != mpp.end()) { 
+(in this if sum=0 asked then only do mpp.find(sum) != mpp.end() since  sum1-sum2=0 is what we want so sum1=sum2 finally)
             maxi = max(maxi, i - mpp[sum - k]);
         }
 
