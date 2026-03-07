@@ -1,0 +1,38 @@
+Start by iterating through the array using a variable i. During each iteration, add the current element arr[i] to a running sum variable.
+Initialize a start variable to keep track of the starting index of the current subarray.
+Use ansStart and ansEnd to store the starting and ending indices of the subarray with the maximum sum found so far. Initially, set both to -1.
+If the current sum is greater than the previous maximum sum, update ansStart to start and ansEnd to i.
+If the sum becomes negative at any point, reset it to 0 and set start to i + 1 to start a new subarray.
+After processing all elements, ansStart and ansEnd will point to the starting and ending indices of the subarray with the maximum sum.
+Return the subarray from arr[ansStart] to arr[ansEnd].
+
+
+CODE:
+ void kadanePrintSubarray(vector<int>& arr)
+{
+    int maxSum = arr[0];
+    int currSum = arr[0];
+
+    int start = 0, end = 0;
+    int currStart = 0;
+
+    for(int i = 1; i < arr.size(); i++)
+    {
+        if(arr[i] > currSum + arr[i])
+        {
+            currSum = arr[i];
+            currStart = i;
+        }
+        else
+        {
+            currSum = currSum + arr[i];
+        }
+
+        if(currSum > maxSum)
+        {
+            maxSum = currSum;
+            start = currStart;
+            end = i;
+        }
+    }
+};
