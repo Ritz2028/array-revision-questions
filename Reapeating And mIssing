@@ -1,0 +1,56 @@
+optimal aproach 1:
+First, calculate the sum of all elements in the given array, denoted as S, and the sum of natural numbers from 1 to N, denoted as Sn. The formula for Sn is (N * (N + 1)) / 2.
+
+Now calculate S - Sn(Sn hai n natural nos ka sum). This gives us X - Y, where X is the repeating number and Y is the missing number.(on observation)
+
+Next, calculate the sum of squares of all elements in the array, denoted as S2, and the sum of squares of the first N numbers, denoted as S2n. The formula for S2n is (N * (N + 1) * (2N + 1)) / 6.
+Now calculate S^2 - Sn^2. This gives us X^2-y^2.
+
+From the equations S - Sn = X - Y and S^2 - Sn^2 = X^2 - Y^2, we can compute X + Y by the formula (S2 - S2n) / (S - Sn).
+Using the values of X + Y and X - Y, we can solve for X and Y through simple addition and subtraction.
+Finally, return the values of X (the repeating number) and Y (the missing number)
+code:
+    vector<int> findMissingRepeatingNumbers(vector<int>& nums) {
+        
+        // Size of the array
+        long long n = nums.size(); 
+
+        // Sum of first n natural numbers
+        long long SN = (n * (n + 1)) / 2;
+        
+        // Sum of squares of first n natural numbers
+        long long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+
+        /*Calculate actual sum (S) and sum 
+        of squares (S2) of array elements*/
+        long long S = 0, S2 = 0;
+        for (int i = 0; i < n; i++) {
+            S += nums[i];
+            S2 += (long long)nums[i] * (long long)nums[i];
+        }
+
+        //Compute the difference values
+        long long val1 = S - SN; 
+        
+        // S2 - S2n = X^2 - Y^2
+        long long val2 = S2 - S2N; 
+
+        //Calculate X + Y using X + Y = (X^2 - Y^2) / (X - Y)
+        val2 = val2 / val1;
+
+        /* Calculate X and Y from X + Y and X - Y
+         X = ((X + Y) + (X - Y)) / 2
+         Y = X - (X - Y)*/
+        long long x = (val1 + val2) / 2;
+        long long y = x - val1;
+
+        // Return the results as {repeating, missing}
+        return {(int)x, (int)y};//typecasting since ans meinvector<int> return karna tha vector<lon long > nhi
+
+    }
+    }
+
+
+method 2
+XOR
+};
