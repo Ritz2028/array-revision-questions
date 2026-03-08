@@ -67,14 +67,14 @@ public:
             }
         }
 
-        int mini =(int) n / 3 + 1;
+        int mini =(int) n / 3 + 1;   #added +1 because the condition is strictly greater than n/3.
         
         vector<int> result; 
 
-        if (cnt1 >= mini) {
+        if (cnt1 >= mini) {  // this is for element 1 only one check u can do vice versa too
             result.push_back(el1);
         }
-        if (cnt2 >= mini && el1 != el2) {
+        if (cnt2 >= mini && el1 != el2) { // for elemnt 2
 
             result.push_back(el2); 
         }
