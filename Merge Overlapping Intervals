@@ -1,0 +1,76 @@
+ intervals=[[1,3],[2,6],[8,10],[15,18]]
+Output : [[1,6],[8,10],[15,18]]
+
+brute:O(N^2)
+Sort all intervals based on their starting points. This helps bring all overlapping intervals next to each other.
+Go through each interval one by one and if the current interval is already covered by a previously merged interval, skip it. Else, pick the current interval as the starting point of a new merged interval.
+Now run another loop to check if the following intervals overlap with the current one
+If the start of next interval is less than or equal to the end of the current merged interval, it means they overlap. Therefore, extend the end of the merged interval to be the maximum of the two ends.
+Keep doing this for the next intervals as long as they overlap. As soon as you find an interval that doesn't overlap, break the inner loop and move back to the outer loop to process the next non-overlapping interval.
+Store each merged interval in the final answer list and after the loop ends, return the list of merged intervals.
+
+code:
+  // Sort intervals based on start time
+        sort(intervals.begin(), intervals.end());
+
+        // Result array to store merged intervals
+        vector<vector<int>> ans;
+
+        // Loop through each interval
+        int n = intervals.size();
+        for (int i = 0; i < n; ) {
+
+            // Start of current merged interval
+            int start = intervals[i][0];
+            int end = intervals[i][1];
+
+            // Merge with all overlapping intervals
+            int j = i + 1;
+            while (j < n && intervals[j][0] <= end) {
+                // Update end to the maximum of current end and overlapping interval's end
+                end = max(end, intervals[j][1]);
+                j++;
+            }
+
+            // Add the merged interval to result
+            ans.push_back({start, end});
+
+            // Move to the next non-overlapping interval
+            i = j;
+        }
+
+        return ans;
+    }
+};
+
+
+optimal: O(N*logN) + O(N)
+Sort the intervals based on their starting points. This ensures overlapping intervals come together.
+Initialize an empty list to store the final merged intervals.
+If the list is empty or the current interval starts after the last one ends, it means there is no overlap, so just add it to the list.
+If the current interval starts before or exactly at the end of the last one, it means there is overlap. So, combine both by extending the end of the last one to the further end of the two.
+Keep doing this until all intervals have been checked. The final list will now contain only non-overlapping, merged intervals.
+
+sort(intervals.begin(), intervals.end());
+
+        // Vector to store final merged intervals
+        vector<vector<int>> merged;
+
+        // Traverse each interval
+        for (auto interval : intervals) {
+            // If merged is empty or current interval does not overlap
+            if (merged.empty() || merged.back()[1] < interval[0]) {
+                // Add current interval as a new non-overlapping block
+                merged.push_back(interval);
+            } else {
+                // Overlapping: merge by extending the end time
+                merged.back()[1] = max(
+                    merged.back()[1],
+                    interval[1]
+                );
+            }
+        }
+
+        return merged;
+    }
+};
