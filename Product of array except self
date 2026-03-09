@@ -1,0 +1,24 @@
+[1,2,3,4]
+Output: [24,12,8,6]
+
+
+code:
+ vector<int> productExceptSelf(vector<int>& nums) {
+        
+     vector<int> output(nums.size(), 1);
+
+        int left = 1;
+        for (int i = 0; i < nums.size(); i++) {
+            output[i] *= left;
+            left *= nums[i];
+        }
+
+        int right = 1;
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            output[i] *= right;
+            right *= nums[i];
+        }
+
+        return output;        
+    }
+};  ham uss posn ke pehle tak ka multiply karke uss particular pe daal rhe hai we are not including that particular positon yani agar i=2nd pos hai to arr[0]*arr[1] ka ans ans[2] mein hoga
