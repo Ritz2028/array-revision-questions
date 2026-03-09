@@ -1,0 +1,18 @@
+ int maxArea(vector<int>& height) {
+        int n=height.size();
+        int l=0;
+        int maxi=0;
+        int r=n-1;
+        while(l<r)
+        {
+            int width= r-l;
+               int ht= min(height[r],height[l]);
+              int ans= ht*width;//paani agar do building ke beech hai to chote wale ke level tak raegi if we compare it to the big tower//
+               maxi=max(maxi,ans);
+
+                height[r]<height[l] ? r-- : l++ ;
+            
+        }
+        return maxi;
+    }
+};
