@@ -1,0 +1,99 @@
+Fast Power / Binary Exponentiation
+Normal method:
+x * x * x * x * ... n times
+Time complexity → O(n)
+
+intuition:
+Fast power reduces it to O(log n) by halving the exponent each step
+The obvious way is:
+x * x * x * x * x * x * x * x
+That’s 8 multiplications.
+2️⃣ Look for Repetition Patterns
+Write the power in another way:
+x^8 = (x^4) * (x^4)
+Now you only need to compute x⁴ once.
+Go deeper:
+x^4 = (x^2) * (x^2)
+x^2 = x * x
+So the structure becomes:
+x^8
+→ (x^4)*(x^4)
+→ ((x^2)*(x^2)) * ((x^2)*(x^2))
+
+This reveals a pattern:
+x^n = (x^(n/2)) * (x^(n/2))
+when n is even.
+
+3️⃣ Turning That Pattern Into Recursion
+Instead of computing x^(n/2) twice, we compute it once:
+x^n = (x^(n/2))²
+or equivalently:
+power(x,n) = power(x*x , n/2)
+{
+DERIVATION OF power(x,n) = power(x*x , n/2)
+ex: n = 2k
+Example:
+n = 8
+k = 4
+Now:
+x^n = x^(2k)
+Using exponent rules:
+x^(2k) = (x^2)^k
+So:
+x^n = (x^2)^(n/2)
+}
+
+This halves the exponent every step.
+
+4️⃣ But What If n is Odd?
+Example:
+x^5
+We can't split evenly.
+But we notice:
+x^5 = x * x^4
+And x⁴ is even, so we can still use the halving trick.
+So we do:
+power(x,5) = x * power(x,4)
+Now the recursion continues normally.
+
+code:
+class Solution{
+
+public:
+
+double power(double x, long long n){
+    
+    if(n==0) return 1;
+    if(n==1) return x;
+
+    if(n%2==0)
+        return power(x*x , n/2);
+
+    else
+        return x * power(x , n-1);
+}
+
+double myPow(double x, int n){
+
+    if(n<0)
+        return 1/power(x , -1LL*n);
+
+    return power(x,n);
+}
+};
+//if the exponent is negative:
+x^n = 1 / x^(-n)
+That’s why we return:
+1 / power(x , positive exponent)
+If:
+n = -3
+We want:
+power(x,3)
+So we pass:
+-n
+Example:
+power(2,-3)
+= 1 / power(2,3)
+
+
+   
