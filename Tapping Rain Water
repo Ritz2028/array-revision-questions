@@ -16,3 +16,8 @@
         return maxi;
     }
 };
+
+// Key observation:
+
+If one wall is shorter, moving the taller one cannot increase area.
+So we move the shorter pointer.
