@@ -1,0 +1,43 @@
+ Nums = [1,2,3,4,5,0]
+Output: 120
+Explanation: 
+In the given array, 1×2×3×4×5 gives maximum product value.
+
+Traverse the array from left to right (prefix) to build cumulative product.
+Traverse the array from right to left (suffix) to catch subarrays ending at the back (helpful when max product is at the end or due to even negatives).
+Reset the product to 1 whenever a zero is found, as it breaks the subarray continuity.
+By comparing products in both directions at each step, we ensure we don’t miss any possible maximum.
+
+code:
+int maxProductSubArray(vector<int>& arr) {
+        // Store size of array
+        int n = arr.size();
+
+        // Initialize prefix and suffix product
+        int pre = 1, suff = 1;
+
+        // Initialize answer to negative infinity
+        int ans = INT_MIN;
+
+        // Traverse from both left and right
+        for (int i = 0; i < n; i++) {
+            // Reset prefix if zero
+            if (pre == 0) pre = 1;
+
+            // Reset suffix if zero
+            if (suff == 0) suff = 1;
+
+            // Multiply prefix with current element from front
+            pre *= arr[i];
+
+            // Multiply suffix with current element from back
+            suff *= arr[n - i - 1];
+
+            // Update the maximum of all products seen so far
+            ans = max(ans, max(pre, suff));
+        }
+
+        // Return the final answer
+        return ans;
+    }
+};
