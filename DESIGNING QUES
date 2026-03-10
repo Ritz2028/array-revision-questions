@@ -1,0 +1,187 @@
+DESIGN HASHSET:
+
+Separate Chaning Method:
+
+Hash Table
+0  →  NULL
+1  →  NULL
+2  →  12 → 22 → 32
+3  →  NULL
+4  →  NULL
+5  →  NULL
+6  →  NULL
+7  →  7
+8  →  NULL
+9  →  NULL
+
+Why This Happens
+Because the hash table size is smaller than the number of possible keys.
+Many numbers can produce the same remainder.
+Example:
+2, 12, 22, 32, 42, 52
+All give:
+%10 = 2
+
+One Important Insight
+We do not store the number at position 2 directly.
+Instead we store it in a container inside index 2.
+Like this:
+vector<vector<int>> table
+
+q:
+Implement MyHashSet class:
+
+void add(key) Inserts the value key into the HashSet.
+bool contains(key) Returns whether the value key exists in the HashSet or not.
+void remove(key) Removes the value key in the HashSet. If key does not exist in the HashSet, do nothing.
+
+code:
+class MyHashSet {
+public:
+
+    int size;
+    vector<vector<int>> bucket;
+
+    MyHashSet() {
+        size = 1000;
+        bucket.resize(size);
+    }
+
+    int hash(int key){
+        return key % size; // for finding bucket no
+    }
+
+    void add(int key) {
+
+        int index = hash(key);
+
+        for(int x : bucket[index]){
+            if(x == key)
+                return; 
+        }
+
+        bucket[index].push_back(key);
+    }
+
+    void remove(int key) {
+
+        int index = hash(key);
+
+        for(int i = 0; i < bucket[index].size(); i++){
+            if(bucket[index][i] == key){
+                bucket[index].erase(bucket[index].begin() + i);
+      //index dhundho then vector list mein traverse karo bucket[index] will give iterator          pointing to the first elemnt of th evector list +i will give the exact posn
+                return;
+            }
+        }
+    }
+
+    bool contains(int key) {
+
+        int index = hash(key);
+
+        for(int x : bucket[index]){
+            if(x == key)
+                return true;
+        }
+
+        return false;
+    }
+};
+
+//bucket.resize(size)
+bucket.resize(size);
+This resizes the outer vector to 1000 elements.
+Before resize:
+bucket = []
+After resize:
+bucket = [ [], [], [], [], ... ]
+          0  1  2  3       999
+
+Each element is an empty vector<int>.
+So internally it becomes:
+bucket[0] = []
+bucket[1] = []
+bucket[2] = []
+...
+bucket[999] = []
+
+
+
+
+
+
+2) DESIGN HASHMAP:
+
+Implement the MyHashMap class:
+
+MyHashMap() initializes the object with an empty map.
+void put(int key, int value) inserts a (key, value) pair into the HashMap. If the key already exists in the map, update the corresponding value.
+int get(int key) returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
+void remove(key) removes the key and its corresponding value if the map contains the mapping for the key.
+
+We again use hashing + buckets (separate chaining).
+Structure:
+vector<vector<pair<int,int>>> bucket
+Meaning each bucket stores:
+(key , value)
+Example table:
+
+index
+2 → [(12,50) , (22,30)]
+7 → [(7,10)]
+
+class MyHashMap {
+public:
+    
+    int size;
+    vector<vector<pair<int,int>>> bucket;//since this tym we had to store {key,value} pair
+
+    MyHashMap() {
+        size = 1000;
+        bucket.resize(size);
+    }
+
+    int hash(int key){
+        return key % size;
+    }
+
+    void put(int key, int value) {
+
+        int index = hash(key);
+
+        for(auto &p : bucket[index]){ //jabhi vector<vector<pair<int,int>>> typa ho to auto & use else in mannual way use :: pair<int,int> &p : bucket[index]
+            if(p.first == key){
+                p.second = value; 
+                return;//then u dont need to add so writng return is important
+            }
+        }
+
+        bucket[index].push_back({key,value});
+    }
+
+    int get(int key) {
+
+        int index = hash(key);
+
+        for(auto &p : bucket[index]){
+            if(p.first == key)
+                return p.second;
+        }
+
+        return -1;
+    }
+
+    void remove(int key) {
+
+        int index = hash(key);
+
+        for(int i=0;i<bucket[index].size();i++){
+            if(bucket[index][i].first == key){
+                bucket[index].erase(bucket[index].begin()+i);
+                return;
+            }
+        }
+    }
+};
+
